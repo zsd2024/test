@@ -44,6 +44,7 @@ jobs:
       # 步骤4：执行Python脚本
       - name: 执行脚本
         run: python test.py  # 替换为你的Python脚本文件名
+        timeout-minutes: 3 # 设置最大执行时间为3分钟
 
       # 可选步骤：保存执行结果（如果需要）
       - name: 保存结果
