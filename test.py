@@ -45,6 +45,4 @@ def fetch_data():
 
 # 运行函数
 if __name__ == "__main__":
-    while True:
-        print("正在请求数据...")
-        fetch_data()
+    fetch_data()

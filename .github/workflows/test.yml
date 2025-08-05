@@ -1,0 +1,61 @@
+name: Test
+
+# 触发条件：定时任务和手动触发
+on:
+  schedule:
+    #  cron表达式格式：分 时 日 月 星期
+    #  每1分钟执行一次
+    - cron: '0 * * * *'
+    - cron: '5 * * * *'
+    - cron: '10 * * * *'
+    - cron: '15 * * * *'
+    - cron: '20 * * * *'
+    - cron: '25 * * * *'
+    - cron: '30 * * * *'
+    - cron: '35 * * * *'
+    - cron: '40 * * * *'
+    - cron: '45 * * * *'
+    - cron: '50 * * * *'
+    - cron: '55 * * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  run-script:
+    # 在最新的Ubuntu环境中运行
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤1：检出仓库代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 步骤2：设置Python环境
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'  # 指定Python版本
+
+      # 步骤3：安装依赖
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install git+https://github.com/VeNoMouS/cloudscraper.git
+
+      # 步骤4：执行Python脚本
+      - name: 执行脚本
+        run: python test.py  # 替换为你的Python脚本文件名
+
+      # 可选步骤：保存执行结果（如果需要）
+      - name: 保存结果
+        if: always()  # 即使前面步骤失败也执行
+        run: |
+          echo "执行时间: $(date)" >> execution_logs.txt
+          echo "状态: ${{ job.status }}" >> execution_logs.txt
+
+      # 可选步骤：提交执行日志（如果需要）
+      - name: 提交日志
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: '更新执行日志'
+          file_pattern: 'execution_logs.txt'
